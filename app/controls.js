@@ -2,6 +2,34 @@
 
 const Controls = React.memo((props) => {
 
+    const deltaBounds = React.useMemo(() => {
+        let lon = 0;
+        let lat = 0;
+
+        try {
+            lon = props.bounds[1][0] - props.bounds[0][0];
+            lat = props.bounds[1][1] - props.bounds[0][1];
+        } catch (e) {
+            console.warn('No bounds');
+        }
+
+        return {lon, lat};
+    }, [props.bounds]);
+
+    const deltaBoundsRect = React.useMemo(() => {
+        let lon = 0;
+        let lat = 0;
+
+        try {
+            lon = props.rectBounds[1][0] - props.rectBounds[0][0];
+            lat = props.rectBounds[1][1] - props.rectBounds[0][1];
+        } catch (e) {
+            console.warn('No rect bounds');
+        }
+
+        return {lon, lat};
+    }, [props.rectBounds]);
+
     return (
         <table>
             <tbody>
@@ -31,19 +59,19 @@ const Controls = React.memo((props) => {
 
                 <tr>
                     <td>Bounds</td>
-                    <td>{JSON.stringify(props.bounds)}</td>
+                    <td>{props.bounds && JSON.stringify(props.bounds)}</td>
                     <td></td>
                 </tr>
 
                 <tr>
                     <td>Bounds delta Lon</td>
-                    <td>{props.bounds && (props.bounds[1][0] - props.bounds[0][0])}</td>
+                    <td>{deltaBounds.lon}</td>
                     <td></td>
                 </tr>
 
                 <tr>
                     <td>Bounds delta Lat</td>
-                    <td>{props.bounds && (props.bounds[1][1] - props.bounds[0][1])}</td>
+                    <td>{deltaBounds.lat}</td>
                     <td></td>
                 </tr>
 
@@ -52,9 +80,9 @@ const Controls = React.memo((props) => {
                     <td>{props.zoom}</td>
                     <td>
                         <input
-                            type="range"
-                            min="0"
-                            max="19"
+                            type="number"
+                            min={0}
+                            max={19}
                             value={props.zoom}
                             onChange={(e) => props.onZoom(e.target.value)}
                         />
@@ -63,19 +91,19 @@ const Controls = React.memo((props) => {
 
                 <tr>
                     <td>Rectangle bounds</td>
-                    <td>{JSON.stringify(props.rectBounds)}</td>
+                    <td>{props.rectBounds && JSON.stringify(props.rectBounds)}</td>
                     <td></td>
                 </tr>
 
                 <tr>
                     <td>Rectangle bounds delta Lon</td>
-                    <td>{props.rectBounds && (props.rectBounds[1][0] - props.rectBounds[0][0])}</td>
+                    <td>{deltaBoundsRect.lon}</td>
                     <td></td>
                 </tr>
 
                 <tr>
                     <td>Rectangle bounds delta Lat</td>
-                    <td>{props.rectBounds && (props.rectBounds[1][1] - props.rectBounds[0][1])}</td>
+                    <td>{deltaBoundsRect.lat}</td>
                     <td></td>
                 </tr>
             </tbody>
